@@ -11,15 +11,51 @@ import android.widget.Toast
  * This activity allows the user to roll a dice and see the result on the screen
  * */
 class MainActivity : AppCompatActivity() {
+
+    /** global variable for keeping track of the number of sides of the dice */
+    private var numSides = 6
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         // Creates rollButton variable which references the button's ID
         val rollButton: Button = findViewById(R.id.button)
-
         // Creates an onclick listener and executes rollDice when clicked
         rollButton.setOnClickListener { rollDice() }
+
+        /** Sets the number of sides TextView to the default(2) */
+        var sides: TextView = findViewById(R.id.numSides)
+        sides.text = numSides.toString()
+
+        /** Sets onclick listeners to the plus and minus buttons */
+        val minusSides: Button = findViewById(R.id.minusButton)
+        val plusSides: Button = findViewById(R.id.plusButton)
+        minusSides.setOnClickListener { deleteSides() }
+        plusSides.setOnClickListener { addSides() }
+
+    }
+
+    /** Subtracts from the number of sides TextView in increments of 1 */
+    private fun deleteSides() {
+        // sets sides to the number of sides TextView
+        var sides: TextView = findViewById(R.id.numSides)
+
+        // Subtracts sides only if there are more than two sides, otherwise makes toast explaining that you cannot subtract anymore
+        if (numSides > 2) {
+            numSides -= 1
+        } else {
+            Toast.makeText(this, "Dice must have more than one side", Toast.LENGTH_SHORT).show()
+        }
+        // Updates the numSides TextView to the new amount of sides
+        sides.text = numSides.toString()
+    }
+
+    /** Adds to the number of sides TextView in increments of 1 */
+     private fun addSides() {
+        var sides: TextView = findViewById(R.id.numSides)
+        numSides += 1
+        sides.text = numSides.toString()
     }
 
     /**
@@ -27,11 +63,11 @@ class MainActivity : AppCompatActivity() {
      * */
     private fun rollDice() {
 
-        val numSides: Int
-
-        // Create a Dice object with 6 sides and roll it
-        val dice = Dice(6)
+        // Create a Dice object with numSides sides and rolls it
+        val dice = Dice(numSides)
         val diceRoll = dice.roll()
+
+        Toast.makeText(this, "Your $numSides sided dice has been rolled...", Toast.LENGTH_SHORT).show()
 
         // Update the screen with the result of the dice roll
         val resultTextView: TextView = findViewById(R.id.textView)
@@ -40,7 +76,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-
+/** Takes numSides as parameter for dice objects */
 class Dice(private val numSides: Int) {
     // Creates a random number based on the numSides
     fun roll(): Int {
