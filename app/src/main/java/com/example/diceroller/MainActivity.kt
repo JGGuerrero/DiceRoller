@@ -3,6 +3,7 @@ package com.example.diceroller
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 
@@ -33,6 +34,9 @@ class MainActivity : AppCompatActivity() {
         val plusSides: Button = findViewById(R.id.plusButton)
         minusSides.setOnClickListener { deleteSides() }
         plusSides.setOnClickListener { addSides() }
+
+        /** do a dice roll when the app starts */
+        rollDice()
 
     }
 
@@ -67,7 +71,28 @@ class MainActivity : AppCompatActivity() {
         val dice = Dice(numSides)
         val diceRoll = dice.roll()
 
-        Toast.makeText(this, "Your $numSides sided dice has been rolled...", Toast.LENGTH_SHORT).show()
+        // Creates reference to the dice ImageView
+        val diceImage: ImageView = findViewById(R.id.diceImage)
+        /**
+         * This is how you set the dice image to a drawable resource:
+         * ~~~~~~~~diceImage.setImageResource(R.drawable.dice_1)~~~~~~~~
+         */
+        /** Replaces the ImageView with dice images depending on diceRoll */
+        val drawableResource = when (diceRoll) {
+            1 -> R.drawable.dice_1
+            2 -> R.drawable.dice_2
+            3 -> R.drawable.dice_3
+            4 -> R.drawable.dice_4
+            5 -> R.drawable.dice_5
+            else -> R.drawable.dice_6
+        }
+        /** Update the ImageView with the correct drawable resource ID */
+        diceImage.setImageResource(drawableResource)
+
+        /** updates the image content description to whatever the dice roll is */
+        diceImage.contentDescription = diceRoll.toString()
+
+        // Toast.makeText(this, "Your $numSides sided dice has been rolled...", Toast.LENGTH_SHORT).show()
 
         // Update the screen with the result of the dice roll
         val resultTextView: TextView = findViewById(R.id.textView)

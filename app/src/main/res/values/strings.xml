@@ -3,4 +3,5 @@
     <string name="roll">Roll</string>
     <string name="minus">-</string>
     <string name="plus">+</string>
+    <string name="choose_the_number_of_sides_of_your_dice">Choose the number of sides of your dice</string>
 </resources>
